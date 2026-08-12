@@ -1,0 +1,142 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_glitter_economy_transactions",
+  "permissions": ["glitter-economy.transactions.view"],
+  "extends": "_admin_base",
+  "meta": {
+    "title": "$t:glitter-economy.admin.transactions.title",
+    "description": "$t:glitter-economy.admin.transactions.description"
+  },
+  "data_sources": [
+    {
+      "id": "transactions",
+      "type": "api",
+      "endpoint": "/api/modules/glitter-economy/admin/transactions",
+      "method": "GET",
+      "auto_fetch": true,
+      "auth_required": true,
+      "refetchOnMount": true,
+      "loading_strategy": "progressive",
+      "params": {
+        "page": "{{query.page}}",
+        "per_page": "{{query.per_page ?? 20}}",
+        "wallet_id": "{{query.wallet_id}}",
+        "user_id": "{{query.user_id}}",
+        "type": "{{query.type}}",
+        "reference_type": "{{query.reference_type}}",
+        "reference_id": "{{query.reference_id}}",
+        "correlation_id": "{{query.correlation_id}}",
+        "date_from": "{{query.date_from}}",
+        "date_to": "{{query.date_to}}"
+      },
+      "errorHandling": {
+        "403": { "handler": "showErrorPage", "params": { "target": "content" } }
+      }
+    }
+  ],
+  "slots": {
+    "content": [
+      {
+        "id": "transactions_content",
+        "type": "basic",
+        "name": "Div",
+        "props": { "className": "p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen" },
+        "children": [
+          {
+            "id": "page_header",
+            "type": "composite",
+            "name": "PageHeader",
+            "props": {
+              "title": "$t:glitter-economy.admin.transactions.title",
+              "description": "$t:glitter-economy.admin.transactions.description"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Button",
+                "props": { "type": "button", "className": "btn btn-outline" },
+                "actions": [{ "type": "click", "handler": "navigate", "target": "/admin/glitter-economy" }],
+                "text": "$t:glitter-economy.admin.common.back_to_wallets"
+              }
+            ]
+          },
+          {
+            "id": "transaction_filters",
+            "type": "basic",
+            "name": "Form",
+            "props": { "className": "mt-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 grid grid-cols-1 md:grid-cols-4 gap-3" },
+            "actions": [
+              {
+                "type": "submit",
+                "handler": "navigate",
+                "params": {
+                  "path": "/admin/glitter-economy/transactions",
+                  "mergeQuery": false,
+                  "query": {
+                    "page": 1,
+                    "wallet_id": "{{$event.target.wallet_id.value}}",
+                    "user_id": "{{$event.target.user_id.value}}",
+                    "type": "{{$event.target.type.value}}",
+                    "reference_type": "{{$event.target.reference_type.value}}",
+                    "reference_id": "{{$event.target.reference_id.value}}",
+                    "correlation_id": "{{$event.target.correlation_id.value}}",
+                    "date_from": "{{$event.target.date_from.value}}",
+                    "date_to": "{{$event.target.date_to.value}}"
+                  }
+                }
+              }
+            ],
+            "children": [
+              { "type": "basic", "name": "Input", "props": { "type": "number", "name": "wallet_id", "value": "{{query.wallet_id ?? ''}}", "placeholder": "$t:glitter-economy.admin.transactions.wallet_id_placeholder", "className": "input" } },
+              { "type": "basic", "name": "Input", "props": { "type": "number", "name": "user_id", "value": "{{query.user_id ?? ''}}", "placeholder": "$t:glitter-economy.admin.fields.user_id", "className": "input" } },
+              { "type": "basic", "name": "Input", "props": { "type": "text", "name": "type", "value": "{{query.type ?? ''}}", "placeholder": "$t:glitter-economy.admin.transactions.type_placeholder", "className": "input" } },
+              { "type": "basic", "name": "Input", "props": { "type": "text", "name": "reference_type", "value": "{{query.reference_type ?? ''}}", "placeholder": "$t:glitter-economy.admin.transactions.reference_type_placeholder", "className": "input" } },
+              { "type": "basic", "name": "Input", "props": { "type": "text", "name": "reference_id", "value": "{{query.reference_id ?? ''}}", "placeholder": "$t:glitter-economy.admin.transactions.reference_id_placeholder", "className": "input" } },
+              { "type": "basic", "name": "Input", "props": { "type": "text", "name": "correlation_id", "value": "{{query.correlation_id ?? ''}}", "placeholder": "$t:glitter-economy.admin.transactions.correlation_placeholder", "className": "input" } },
+              { "type": "basic", "name": "Input", "props": { "type": "date", "name": "date_from", "value": "{{query.date_from ?? ''}}", "placeholder": "$t:glitter-economy.admin.transactions.date_from_placeholder", "className": "input" } },
+              { "type": "basic", "name": "Input", "props": { "type": "date", "name": "date_to", "value": "{{query.date_to ?? ''}}", "placeholder": "$t:glitter-economy.admin.transactions.date_to_placeholder", "className": "input" } },
+              { "type": "basic", "name": "Button", "props": { "type": "submit", "className": "btn btn-primary md:col-span-4" }, "text": "$t:glitter-economy.admin.transactions.search" }
+            ]
+          },
+          {
+            "id": "transaction_cards",
+            "type": "composite",
+            "name": "CardGrid",
+            "blur_until_loaded": true,
+            "props": {
+              "data": "{{transactions?.data?.data ?? []}}",
+              "gridColumns": 1,
+              "gap": 4,
+              "pagination": true,
+              "serverSidePagination": true,
+              "serverCurrentPage": "{{transactions?.data?.pagination?.current_page ?? 1}}",
+              "serverTotalPages": "{{transactions?.data?.pagination?.last_page ?? 1}}",
+              "alwaysShowPagination": true,
+              "emptyMessage": "$t:glitter-economy.admin.transactions.empty",
+              "cardClassName": "rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-5",
+              "cardColumns": [
+                {
+                  "id": "transaction_card",
+                  "cellChildren": [
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": { "className": "grid grid-cols-1 lg:grid-cols-5 gap-4 items-center" },
+                      "children": [
+                        { "type": "basic", "name": "Div", "children": [ { "type": "basic", "name": "Span", "props": { "className": "text-xs text-gray-500" }, "text": "$t:glitter-economy.admin.fields.transaction_type" }, { "type": "basic", "name": "P", "props": { "className": "font-semibold text-gray-900 dark:text-white" }, "text": "{{row.transaction_type}}" } ] },
+                        { "type": "basic", "name": "Div", "children": [ { "type": "basic", "name": "Span", "props": { "className": "text-xs text-gray-500" }, "text": "$t:glitter-economy.admin.fields.wallet_id" }, { "type": "basic", "name": "P", "props": { "className": "font-mono text-sm text-gray-900 dark:text-white" }, "text": "{{row.wallet_id}}" } ] },
+                        { "type": "basic", "name": "Div", "children": [ { "type": "basic", "name": "Span", "props": { "className": "text-xs text-gray-500" }, "text": "$t:glitter-economy.admin.fields.amount" }, { "type": "basic", "name": "P", "props": { "className": "font-semibold text-gray-900 dark:text-white" }, "text": "{{row.amount}}" } ] },
+                        { "type": "basic", "name": "Div", "children": [ { "type": "basic", "name": "Span", "props": { "className": "text-xs text-gray-500" }, "text": "$t:glitter-economy.admin.fields.balance_after" }, { "type": "basic", "name": "P", "props": { "className": "font-semibold text-gray-900 dark:text-white" }, "text": "{{row.balance_after}}" } ] },
+                        { "type": "basic", "name": "Div", "children": [ { "type": "basic", "name": "Span", "props": { "className": "text-xs text-gray-500" }, "text": "$t:glitter-economy.admin.fields.occurred_at" }, { "type": "basic", "name": "P", "props": { "className": "font-mono text-sm text-gray-900 dark:text-white" }, "text": "{{row.occurred_at}}" } ] }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

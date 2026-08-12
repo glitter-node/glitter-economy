@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "routes": [
+    {
+      "path": "*/admin/glitter-economy",
+      "layout": "admin_glitter_economy_wallets",
+      "auth_required": true,
+      "permission": "glitter-economy.admin.access",
+      "meta": {
+        "title": "$t:glitter-economy.admin.wallets.title",
+        "description": "$t:glitter-economy.admin.wallets.description"
+      }
+    },
+    {
+      "path": "*/admin/glitter-economy/wallets/:userId",
+      "layout": "admin_glitter_economy_wallet_detail",
+      "auth_required": true,
+      "permission": "glitter-economy.admin.access",
+      "meta": {
+        "title": "$t:glitter-economy.admin.wallet_detail.title",
+        "description": "$t:glitter-economy.admin.wallet_detail.description"
+      }
+    },
+    {
+      "path": "*/admin/glitter-economy/transactions",
+      "layout": "admin_glitter_economy_transactions",
+      "auth_required": true,
+      "permission": "glitter-economy.transactions.view",
+      "meta": {
+        "title": "$t:glitter-economy.admin.transactions.title",
+        "description": "$t:glitter-economy.admin.transactions.description"
+      }
+    }
+  ]
+}

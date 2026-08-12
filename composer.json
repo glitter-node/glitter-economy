@@ -1,0 +1,17 @@
+{
+    "name": "modules/glitter-economy",
+    "description": "Shared economy infrastructure module for Gnuboard7",
+    "type": "library",
+    "version": "0.9.13",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Modules\\Glitter\\Economy\\": "src/",
+            "Modules\\Glitter\\Economy\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "ext-bcmath": "*"
+    }
+}

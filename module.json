@@ -1,0 +1,19 @@
+{
+    "identifier": "glitter-economy",
+    "vendor": "Glitter.kr",
+    "name": {
+        "ko": "글리터 이코노미",
+        "en": "Glitter Economy"
+    },
+    "version": "0.9.13",
+    "license": "MIT",
+    "description": {
+        "ko": "커뮤니티 포인트, 보상, 경매, 광고, 커미션, 크레딧을 위한 공유 경제 인프라 모듈",
+        "en": "Shared economy infrastructure module for points, rewards, auctions, ads, commissions, and credits"
+    },
+    "g7_version": ">=7.0.0-beta.5",
+    "dependencies": {
+        "modules": {},
+        "plugins": {}
+    }
+}
