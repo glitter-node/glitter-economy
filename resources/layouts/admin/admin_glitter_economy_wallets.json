@@ -1,0 +1,696 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_glitter_economy_wallets",
+  "permissions": [
+    "glitter-economy.admin.access"
+  ],
+  "extends": "_admin_base",
+  "meta": {
+    "title": "$t:glitter-economy.admin.wallets.title",
+    "description": "$t:glitter-economy.admin.wallets.description"
+  },
+  "data_sources": [
+    {
+      "id": "wallets",
+      "type": "api",
+      "endpoint": "/api/modules/glitter-economy/admin/wallets",
+      "method": "GET",
+      "auto_fetch": true,
+      "auth_required": true,
+      "refetchOnMount": true,
+      "loading_strategy": "progressive",
+      "params": {
+        "page": "{{query.page}}",
+        "per_page": "{{query.per_page ?? 20}}",
+        "search": "{{query.search}}",
+        "user_id": "{{query.user_id}}",
+        "wallet_type": "{{query.wallet_type}}",
+        "currency_code": "{{query.currency_code}}",
+        "status": "{{query.status}}"
+      },
+      "errorHandling": {
+        "403": {
+          "handler": "showErrorPage",
+          "params": {
+            "target": "content"
+          }
+        }
+      }
+    }
+  ],
+  "slots": {
+    "content": [
+      {
+        "id": "wallets_content",
+        "type": "basic",
+        "name": "Div",
+        "props": {
+          "className": "p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen"
+        },
+        "children": [
+          {
+            "id": "page_header",
+            "type": "composite",
+            "name": "PageHeader",
+            "props": {
+              "title": "$t:glitter-economy.admin.wallets.title",
+              "description": "$t:glitter-economy.admin.wallets.description"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Button",
+                "props": {
+                  "type": "button",
+                  "className": "btn btn-outline"
+                },
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "navigate",
+                    "target": "/admin/glitter-economy/transactions"
+                  }
+                ],
+                "text": "$t:glitter-economy.admin.transactions.title"
+              }
+            ]
+          },
+          {
+            "id": "summary_grid",
+            "type": "basic",
+            "name": "Div",
+            "props": {
+              "className": "mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Span",
+                    "props": {
+                      "className": "text-sm text-gray-500 dark:text-gray-400"
+                    },
+                    "text": "$t:glitter-economy.admin.wallets.total_wallets"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "mt-2 text-2xl font-semibold text-gray-900 dark:text-white"
+                    },
+                    "text": "{{wallets?.data?.summary?.total_wallets ?? 0}}"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Span",
+                    "props": {
+                      "className": "text-sm text-gray-500 dark:text-gray-400"
+                    },
+                    "text": "$t:glitter-economy.admin.wallets.total_balance"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "mt-2 text-2xl font-semibold text-gray-900 dark:text-white"
+                    },
+                    "text": "{{wallets?.data?.summary?.total_balance ?? '0.00'}}"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Span",
+                    "props": {
+                      "className": "text-sm text-gray-500 dark:text-gray-400"
+                    },
+                    "text": "$t:glitter-economy.admin.wallets.total_locked_balance"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "mt-2 text-2xl font-semibold text-gray-900 dark:text-white"
+                    },
+                    "text": "{{wallets?.data?.summary?.total_locked_balance ?? '0.00'}}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "manual_adjustment",
+            "type": "basic",
+            "name": "Form",
+            "if": "{{wallets?.data?.abilities?.can_adjust === true}}",
+            "dataKey": "adjustmentForm",
+            "props": {
+              "className": "mt-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "H2",
+                "props": {
+                  "className": "text-lg font-semibold text-gray-900 dark:text-white"
+                },
+                "text": "$t:glitter-economy.admin.adjustment.title"
+              },
+              {
+                "type": "basic",
+                "name": "P",
+                "props": {
+                  "className": "mt-1 text-sm text-gray-500 dark:text-gray-400"
+                },
+                "text": "$t:glitter-economy.admin.adjustment.description"
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "mt-5 grid grid-cols-1 md:grid-cols-2 gap-4"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "Label",
+                        "props": {
+                          "htmlFor": "adjustment_user_id",
+                          "className": "block text-sm font-medium text-gray-700 dark:text-gray-300"
+                        },
+                        "text": "$t:glitter-economy.admin.fields.user_id"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Input",
+                        "props": {
+                          "id": "adjustment_user_id",
+                          "name": "user_id",
+                          "type": "number",
+                          "min": 1,
+                          "required": true,
+                          "placeholder": "$t:glitter-economy.admin.adjustment.user_id_placeholder",
+                          "className": "input mt-1 w-full"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "Label",
+                        "props": {
+                          "htmlFor": "adjustment_amount",
+                          "className": "block text-sm font-medium text-gray-700 dark:text-gray-300"
+                        },
+                        "text": "$t:glitter-economy.admin.fields.amount"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Input",
+                        "props": {
+                          "id": "adjustment_amount",
+                          "name": "amount",
+                          "type": "text",
+                          "inputMode": "decimal",
+                          "required": true,
+                          "placeholder": "$t:glitter-economy.admin.adjustment.amount_placeholder",
+                          "className": "input mt-1 w-full"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "Label",
+                        "props": {
+                          "htmlFor": "adjustment_memo",
+                          "className": "block text-sm font-medium text-gray-700 dark:text-gray-300"
+                        },
+                        "text": "$t:glitter-economy.admin.adjustment.memo"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "Textarea",
+                        "props": {
+                          "id": "adjustment_memo",
+                          "name": "memo",
+                          "rows": 3,
+                          "maxLength": 500,
+                          "placeholder": "$t:glitter-economy.admin.adjustment.memo_placeholder",
+                          "className": "input mt-1 w-full"
+                        }
+                      }
+                    ],
+                    "props": {
+                      "className": "md:col-span-2"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "P",
+                "props": {
+                  "className": "mt-4 text-xs text-gray-500 dark:text-gray-400"
+                },
+                "text": "$t:glitter-economy.admin.adjustment.safety_notice"
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "mt-5 flex flex-wrap gap-3"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Button",
+                    "props": {
+                      "type": "button",
+                      "disabled": "{{_local.adjustmentSubmitting}}",
+                      "className": "btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                    },
+                    "actions": [
+                      {
+                        "type": "click",
+                        "handler": "sequence",
+                        "actions": [
+                          {
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "adjustmentSubmitting": true
+                            }
+                          },
+                          {
+                            "handler": "apiCall",
+                            "auth_required": true,
+                            "target": "/api/modules/glitter-economy/admin/wallets/credit",
+                            "params": {
+                              "method": "POST",
+                              "body": "{{_local.adjustmentForm}}"
+                            },
+                            "onSuccess": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "adjustmentSubmitting": false,
+                                  "adjustmentForm": {
+                                    "user_id": "",
+                                    "amount": "",
+                                    "memo": ""
+                                  }
+                                }
+                              },
+                              {
+                                "handler": "refetchDataSource",
+                                "params": {
+                                  "dataSourceId": "wallets"
+                                }
+                              },
+                              {
+                                "handler": "toast",
+                                "params": {
+                                  "type": "success",
+                                  "message": "$t:glitter-economy.admin.adjustment.credit_success"
+                                }
+                              }
+                            ],
+                            "onError": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "adjustmentSubmitting": false
+                                }
+                              },
+                              {
+                                "handler": "toast",
+                                "params": {
+                                  "type": "error",
+                                  "message": "{{error.message ?? '$t:glitter-economy.admin.adjustment.failed'}}"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "text": "$t:glitter-economy.admin.adjustment.credit"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Button",
+                    "props": {
+                      "type": "button",
+                      "disabled": "{{_local.adjustmentSubmitting}}",
+                      "className": "btn btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
+                    },
+                    "actions": [
+                      {
+                        "type": "click",
+                        "handler": "sequence",
+                        "actions": [
+                          {
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "adjustmentSubmitting": true
+                            }
+                          },
+                          {
+                            "handler": "apiCall",
+                            "auth_required": true,
+                            "target": "/api/modules/glitter-economy/admin/wallets/debit",
+                            "params": {
+                              "method": "POST",
+                              "body": "{{_local.adjustmentForm}}"
+                            },
+                            "onSuccess": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "adjustmentSubmitting": false,
+                                  "adjustmentForm": {
+                                    "user_id": "",
+                                    "amount": "",
+                                    "memo": ""
+                                  }
+                                }
+                              },
+                              {
+                                "handler": "refetchDataSource",
+                                "params": {
+                                  "dataSourceId": "wallets"
+                                }
+                              },
+                              {
+                                "handler": "toast",
+                                "params": {
+                                  "type": "success",
+                                  "message": "$t:glitter-economy.admin.adjustment.debit_success"
+                                }
+                              }
+                            ],
+                            "onError": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "adjustmentSubmitting": false
+                                }
+                              },
+                              {
+                                "handler": "toast",
+                                "params": {
+                                  "type": "error",
+                                  "message": "{{error.message ?? '$t:glitter-economy.admin.adjustment.failed'}}"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "text": "$t:glitter-economy.admin.adjustment.debit"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "filters",
+            "type": "basic",
+            "name": "Form",
+            "props": {
+              "className": "mt-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 grid grid-cols-1 md:grid-cols-5 gap-3"
+            },
+            "actions": [
+              {
+                "type": "submit",
+                "handler": "navigate",
+                "params": {
+                  "path": "/admin/glitter-economy",
+                  "mergeQuery": false,
+                  "query": {
+                    "page": 1,
+                    "search": "{{$event.target.search.value}}",
+                    "user_id": "{{$event.target.user_id.value}}",
+                    "status": "{{$event.target.status.value}}",
+                    "currency_code": "{{$event.target.currency_code.value}}"
+                  }
+                }
+              }
+            ],
+            "children": [
+              {
+                "type": "basic",
+                "name": "Input",
+                "props": {
+                  "type": "text",
+                  "name": "search",
+                  "value": "{{query.search ?? ''}}",
+                  "placeholder": "$t:glitter-economy.admin.wallets.search_placeholder",
+                  "className": "input"
+                }
+              },
+              {
+                "type": "basic",
+                "name": "Input",
+                "props": {
+                  "type": "number",
+                  "name": "user_id",
+                  "value": "{{query.user_id ?? ''}}",
+                  "placeholder": "$t:glitter-economy.admin.fields.user_id",
+                  "className": "input"
+                }
+              },
+              {
+                "type": "basic",
+                "name": "Input",
+                "props": {
+                  "type": "text",
+                  "name": "status",
+                  "value": "{{query.status ?? ''}}",
+                  "placeholder": "$t:glitter-economy.admin.fields.status",
+                  "className": "input"
+                }
+              },
+              {
+                "type": "basic",
+                "name": "Input",
+                "props": {
+                  "type": "text",
+                  "name": "currency_code",
+                  "value": "{{query.currency_code ?? ''}}",
+                  "placeholder": "$t:glitter-economy.admin.fields.currency_code",
+                  "className": "input"
+                }
+              },
+              {
+                "type": "basic",
+                "name": "Button",
+                "props": {
+                  "type": "submit",
+                  "className": "btn btn-primary"
+                },
+                "text": "$t:glitter-economy.admin.wallets.search"
+              }
+            ]
+          },
+          {
+            "id": "wallet_cards",
+            "type": "composite",
+            "name": "CardGrid",
+            "blur_until_loaded": true,
+            "props": {
+              "data": "{{wallets?.data?.data ?? []}}",
+              "gridColumns": 1,
+              "gap": 4,
+              "pagination": true,
+              "serverSidePagination": true,
+              "serverCurrentPage": "{{wallets?.data?.pagination?.current_page ?? 1}}",
+              "serverTotalPages": "{{wallets?.data?.pagination?.last_page ?? 1}}",
+              "alwaysShowPagination": true,
+              "emptyMessage": "$t:glitter-economy.admin.wallets.empty",
+              "cardClassName": "rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-5",
+              "cardColumns": [
+                {
+                  "id": "wallet_card",
+                  "cellChildren": [
+                    {
+                      "type": "basic",
+                      "name": "Div",
+                      "props": {
+                        "className": "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
+                      },
+                      "children": [
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "children": [
+                            {
+                              "type": "basic",
+                              "name": "H3",
+                              "props": {
+                                "className": "text-base font-semibold text-gray-900 dark:text-white"
+                              },
+                              "text": "{{row.user?.email || row.user?.nickname || row.user?.name || row.user_id}}"
+                            },
+                            {
+                              "type": "basic",
+                              "name": "P",
+                              "props": {
+                                "className": "mt-1 text-sm text-gray-500 dark:text-gray-400"
+                              },
+                              "text": "{{row.wallet_type + ' / ' + row.currency_code + ' / ' + row.status}}"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Div",
+                          "props": {
+                            "className": "grid grid-cols-3 gap-4 text-right"
+                          },
+                          "children": [
+                            {
+                              "type": "basic",
+                              "name": "Div",
+                              "children": [
+                                {
+                                  "type": "basic",
+                                  "name": "Span",
+                                  "props": {
+                                    "className": "text-xs text-gray-500"
+                                  },
+                                  "text": "$t:glitter-economy.admin.fields.balance"
+                                },
+                                {
+                                  "type": "basic",
+                                  "name": "P",
+                                  "props": {
+                                    "className": "font-semibold text-gray-900 dark:text-white"
+                                  },
+                                  "text": "{{row.balance}}"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "basic",
+                              "name": "Div",
+                              "children": [
+                                {
+                                  "type": "basic",
+                                  "name": "Span",
+                                  "props": {
+                                    "className": "text-xs text-gray-500"
+                                  },
+                                  "text": "$t:glitter-economy.admin.fields.locked_balance"
+                                },
+                                {
+                                  "type": "basic",
+                                  "name": "P",
+                                  "props": {
+                                    "className": "font-semibold text-gray-900 dark:text-white"
+                                  },
+                                  "text": "{{row.locked_balance}}"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "basic",
+                              "name": "Div",
+                              "children": [
+                                {
+                                  "type": "basic",
+                                  "name": "Span",
+                                  "props": {
+                                    "className": "text-xs text-gray-500"
+                                  },
+                                  "text": "$t:glitter-economy.admin.fields.available_balance"
+                                },
+                                {
+                                  "type": "basic",
+                                  "name": "P",
+                                  "props": {
+                                    "className": "font-semibold text-gray-900 dark:text-white"
+                                  },
+                                  "text": "{{row.available_balance}}"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "basic",
+                          "name": "Button",
+                          "props": {
+                            "type": "button",
+                            "className": "btn btn-outline"
+                          },
+                          "actions": [
+                            {
+                              "type": "click",
+                              "handler": "navigate",
+                              "target": "/admin/glitter-economy/wallets/{{row.user_id}}"
+                            }
+                          ],
+                          "text": "$t:glitter-economy.admin.wallets.open_detail"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "initLocal": {
+    "adjustmentForm": {
+      "user_id": "",
+      "amount": "",
+      "memo": ""
+    },
+    "adjustmentSubmitting": false
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "description": "Glitter Economy initial settings",
+    "categories": ["wallet", "transfer", "expiration", "reward"]
+  },
+  "defaults": {
+    "wallet": {
+      "currency_name": "Point",
+      "currency_symbol": "P",
+      "allow_negative_balance": false,
+      "max_balance": 999999999
+    },
+    "transfer": {
+      "enabled": false,
+      "minimum_amount": 1,
+      "daily_limit": 0,
+      "transfer_fee": 0
+    },
+    "expiration": {
+      "enabled": false,
+      "expire_after_days": 0,
+      "warning_days": 30
+    },
+    "reward": {
+      "signup_reward": 0,
+      "daily_attendance_reward": 0
+    }
+  },
+  "frontend_schema": {
+    "wallet": {
+      "expose": false
+    },
+    "transfer": {
+      "expose": false
+    },
+    "expiration": {
+      "expose": false
+    },
+    "reward": {
+      "expose": false
+    }
+  }
+}

@@ -1,0 +1,301 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_glitter_economy_wallet_detail",
+  "permissions": [
+    "glitter-economy.admin.access"
+  ],
+  "extends": "_admin_base",
+  "meta": {
+    "title": "$t:glitter-economy.admin.wallet_detail.title",
+    "description": "$t:glitter-economy.admin.wallet_detail.description"
+  },
+  "transition_overlay": {
+    "wait_for": [
+      "wallet"
+    ]
+  },
+  "data_sources": [
+    {
+      "id": "wallet",
+      "type": "api",
+      "endpoint": "/api/modules/glitter-economy/admin/wallets/users/{{route.userId}}",
+      "method": "GET",
+      "auto_fetch": true,
+      "auth_required": true,
+      "refetchOnMount": true,
+      "loading_strategy": "progressive",
+      "errorHandling": {
+        "403": {
+          "handler": "showErrorPage",
+          "params": {
+            "target": "content"
+          }
+        },
+        "404": {
+          "handler": "showErrorPage",
+          "params": {
+            "target": "content"
+          }
+        }
+      }
+    }
+  ],
+  "slots": {
+    "content": [
+      {
+        "id": "wallet_detail_content",
+        "type": "basic",
+        "name": "Div",
+        "props": {
+          "className": "p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-gray-900 min-h-screen"
+        },
+        "children": [
+          {
+            "id": "page_header",
+            "type": "composite",
+            "name": "PageHeader",
+            "props": {
+              "title": "$t:glitter-economy.admin.wallet_detail.title",
+              "description": "$t:glitter-economy.admin.wallet_detail.description"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Button",
+                "props": {
+                  "type": "button",
+                  "className": "btn btn-outline"
+                },
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "navigate",
+                    "target": "/admin/glitter-economy"
+                  }
+                ],
+                "text": "$t:glitter-economy.admin.common.back_to_wallets"
+              }
+            ]
+          },
+          {
+            "id": "wallet_summary",
+            "type": "basic",
+            "name": "Div",
+            "props": {
+              "className": "mt-6 grid grid-cols-1 md:grid-cols-3 gap-4"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Span",
+                    "props": {
+                      "className": "text-sm text-gray-500 dark:text-gray-400"
+                    },
+                    "text": "$t:glitter-economy.admin.fields.balance"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "mt-2 text-2xl font-semibold text-gray-900 dark:text-white"
+                    },
+                    "text": "{{wallet.data.balance}}"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Span",
+                    "props": {
+                      "className": "text-sm text-gray-500 dark:text-gray-400"
+                    },
+                    "text": "$t:glitter-economy.admin.fields.locked_balance"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "mt-2 text-2xl font-semibold text-gray-900 dark:text-white"
+                    },
+                    "text": "{{wallet.data.locked_balance}}"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Span",
+                    "props": {
+                      "className": "text-sm text-gray-500 dark:text-gray-400"
+                    },
+                    "text": "$t:glitter-economy.admin.fields.available_balance"
+                  },
+                  {
+                    "type": "basic",
+                    "name": "P",
+                    "props": {
+                      "className": "mt-2 text-2xl font-semibold text-gray-900 dark:text-white"
+                    },
+                    "text": "{{wallet.data.available_balance}}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "wallet_fields",
+            "type": "basic",
+            "name": "Div",
+            "props": {
+              "className": "mt-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
+            },
+            "children": [
+              {
+                "type": "basic",
+                "name": "Div",
+                "props": {
+                  "className": "grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-200 dark:divide-gray-700"
+                },
+                "children": [
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "p-6 space-y-4"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "H2",
+                        "props": {
+                          "className": "text-lg font-semibold text-gray-900 dark:text-white"
+                        },
+                        "text": "$t:glitter-economy.admin.wallet_detail.identity_section"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "text": "$t:glitter-economy.admin.fields.wallet_id"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "font-mono text-sm text-gray-900 dark:text-white"
+                        },
+                        "text": "{{wallet.data.id}}"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "text": "$t:glitter-economy.admin.fields.uuid"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "font-mono text-sm text-gray-900 dark:text-white break-all"
+                        },
+                        "text": "{{wallet.data.uuid}}"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "text": "$t:glitter-economy.admin.fields.user_id"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "font-mono text-sm text-gray-900 dark:text-white"
+                        },
+                        "text": "{{wallet.data.user_id}}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "basic",
+                    "name": "Div",
+                    "props": {
+                      "className": "p-6 space-y-4"
+                    },
+                    "children": [
+                      {
+                        "type": "basic",
+                        "name": "H2",
+                        "props": {
+                          "className": "text-lg font-semibold text-gray-900 dark:text-white"
+                        },
+                        "text": "$t:glitter-economy.admin.wallet_detail.status_section"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "text": "$t:glitter-economy.admin.fields.wallet_type"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "font-mono text-sm text-gray-900 dark:text-white"
+                        },
+                        "text": "{{wallet.data.wallet_type}}"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "text": "$t:glitter-economy.admin.fields.currency_code"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "props": {
+                          "className": "font-mono text-sm text-gray-900 dark:text-white"
+                        },
+                        "text": "{{wallet.data.currency_code}}"
+                      },
+                      {
+                        "type": "basic",
+                        "name": "P",
+                        "text": "$t:glitter-economy.admin.fields.status"
+                      },
+                      {
+                        "type": "composite",
+                        "name": "StatusBadge",
+                        "props": {
+                          "status": "{{wallet.data.status === 'active' ? 'success' : 'warning'}}",
+                          "label": "{{wallet.data.status}}",
+                          "showIcon": false
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

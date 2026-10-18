@@ -1,0 +1,89 @@
+{
+  "admin": {
+    "common": {
+      "back_to_wallets": "지갑 조회로 돌아가기"
+    },
+    "wallets": {
+      "title": "이코노미 지갑",
+      "description": "관리자 권한으로 이코노미 지갑 상태를 조회합니다.",
+      "search": "조회",
+      "search_placeholder": "사용자 ID, 이메일, 이름, 닉네임",
+      "empty": "조회된 지갑이 없습니다.",
+      "total_wallets": "전체 지갑",
+      "total_balance": "전체 잔액",
+      "total_locked_balance": "전체 잠금 잔액",
+      "open_detail": "상세 보기"
+    },
+    "wallet_detail": {
+      "title": "이코노미 지갑 상세",
+      "description": "사용자 지갑의 식별 정보, 상태, 잔액을 확인합니다.",
+      "identity_section": "식별 정보",
+      "status_section": "상태 정보"
+    },
+    "transactions": {
+      "title": "이코노미 거래",
+      "description": "이코노미 거래 원장 조회 화면입니다.",
+      "wallet_id_placeholder": "지갑 ID",
+      "correlation_placeholder": "상관관계 ID",
+      "search": "검색",
+      "empty": "조회된 거래가 없습니다.",
+      "type_placeholder": "거래 유형",
+      "reference_type_placeholder": "참조 유형",
+      "reference_id_placeholder": "참조 ID",
+      "date_from_placeholder": "시작일",
+      "date_to_placeholder": "종료일"
+    },
+    "fields": {
+      "wallet_id": "지갑 ID",
+      "uuid": "UUID",
+      "user_id": "사용자 ID",
+      "wallet_type": "지갑 유형",
+      "currency_code": "통화 코드",
+      "balance": "잔액",
+      "locked_balance": "잠금 잔액",
+      "available_balance": "사용 가능 잔액",
+      "status": "상태",
+      "transaction_type": "거래 유형",
+      "amount": "금액",
+      "balance_after": "거래 후 잔액",
+      "occurred_at": "발생 일시"
+    },
+    "adjustment": {
+      "title": "수동 잔액 조정",
+      "description": "사용자 ID를 기준으로 이코노미 잔액을 적립하거나 차감합니다.",
+      "user_id_placeholder": "조정할 사용자 ID",
+      "amount_placeholder": "0보다 큰 금액",
+      "memo": "메모 / 사유",
+      "memo_placeholder": "조정 사유를 입력하세요.",
+      "safety_notice": "적립은 지갑이 없으면 생성하며, 차감은 기존 지갑과 사용 가능 잔액이 필요합니다.",
+      "credit": "적립",
+      "debit": "차감",
+      "credit_success": "이코노미 잔액을 적립했습니다.",
+      "debit_success": "이코노미 잔액을 차감했습니다.",
+      "failed": "잔액 조정에 실패했습니다."
+    }
+  },
+  "user": {
+    "wallet": {
+      "title": "내 지갑",
+      "description": "내 지갑 잔액과 최근 이코노미 거래 내역을 확인합니다.",
+      "wallet_status": "지갑 상태"
+    },
+    "transactions": {
+      "title": "최근 거래",
+      "empty": "조회된 거래가 없습니다."
+    },
+    "fields": {
+      "balance": "잔액",
+      "locked_balance": "잠금 잔액",
+      "available_balance": "사용 가능 잔액",
+      "wallet_type": "지갑 유형",
+      "currency_code": "통화 코드",
+      "status": "상태",
+      "transaction_type": "거래 유형",
+      "amount": "금액",
+      "balance_after": "거래 후 잔액",
+      "occurred_at": "발생 일시"
+    }
+  }
+}

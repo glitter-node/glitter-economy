@@ -1,0 +1,89 @@
+{
+  "admin": {
+    "common": {
+      "back_to_wallets": "Back to wallet inspection"
+    },
+    "wallets": {
+      "title": "Economy Wallets",
+      "description": "Inspect economy wallet state with administrator permissions.",
+      "search": "Inspect",
+      "search_placeholder": "User ID, email, name, or nickname",
+      "empty": "No wallets found.",
+      "total_wallets": "Total Wallets",
+      "total_balance": "Total Balance",
+      "total_locked_balance": "Total Locked Balance",
+      "open_detail": "Open detail"
+    },
+    "wallet_detail": {
+      "title": "Economy Wallet Detail",
+      "description": "Inspect user wallet identity, status, and balances.",
+      "identity_section": "Identity",
+      "status_section": "Status"
+    },
+    "transactions": {
+      "title": "Economy Transactions",
+      "description": "Inspect the economy transaction ledger.",
+      "wallet_id_placeholder": "Wallet ID",
+      "correlation_placeholder": "Correlation ID",
+      "search": "Search",
+      "empty": "No transactions found.",
+      "type_placeholder": "Transaction Type",
+      "reference_type_placeholder": "Reference Type",
+      "reference_id_placeholder": "Reference ID",
+      "date_from_placeholder": "Start Date",
+      "date_to_placeholder": "End Date"
+    },
+    "fields": {
+      "wallet_id": "Wallet ID",
+      "uuid": "UUID",
+      "user_id": "User ID",
+      "wallet_type": "Wallet Type",
+      "currency_code": "Currency Code",
+      "balance": "Balance",
+      "locked_balance": "Locked Balance",
+      "available_balance": "Available Balance",
+      "status": "Status",
+      "transaction_type": "Transaction Type",
+      "amount": "Amount",
+      "balance_after": "Balance After",
+      "occurred_at": "Occurred At"
+    },
+    "adjustment": {
+      "title": "Manual Balance Adjustment",
+      "description": "Credit or debit economy balance by user ID.",
+      "user_id_placeholder": "User ID to adjust",
+      "amount_placeholder": "Amount greater than zero",
+      "memo": "Memo / Reason",
+      "memo_placeholder": "Enter the adjustment reason.",
+      "safety_notice": "Credit creates a missing wallet; debit requires an existing wallet and sufficient available balance.",
+      "credit": "Credit",
+      "debit": "Debit",
+      "credit_success": "Economy balance credited.",
+      "debit_success": "Economy balance debited.",
+      "failed": "Balance adjustment failed."
+    }
+  },
+  "user": {
+    "wallet": {
+      "title": "My Wallet",
+      "description": "View your wallet balances and recent economy transactions.",
+      "wallet_status": "Wallet Status"
+    },
+    "transactions": {
+      "title": "Recent Transactions",
+      "empty": "No transactions found."
+    },
+    "fields": {
+      "balance": "Balance",
+      "locked_balance": "Locked Balance",
+      "available_balance": "Available Balance",
+      "wallet_type": "Wallet Type",
+      "currency_code": "Currency Code",
+      "status": "Status",
+      "transaction_type": "Transaction Type",
+      "amount": "Amount",
+      "balance_after": "Balance After",
+      "occurred_at": "Occurred At"
+    }
+  }
+}
